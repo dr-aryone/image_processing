@@ -1,0 +1,27 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Image Processing</title>
+    <style>
+      body {
+        font-family: sans-serif;
+      }
+    </style>
+  </head>
+  <body>
+    <p>Select image file:  <input type="file" accept="image/*" id="img" /></p>
+    <canvas id="base"></canvas>
+    <canvas id="gray"></canvas>
+    <canvas id="gauss"></canvas>
+    <canvas id="sobel"></canvas>
+
+
+    <script src="convolution.js"></script>
+    <script src="grayscale.js"></script>
+    <script src="gaussian_blur.js"></script>
+    <script src="sobel.js"></script>
+    <script src="main.js"></script>
+  </body>
+</html>
+
