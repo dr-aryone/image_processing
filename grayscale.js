@@ -8,7 +8,7 @@
       var grayColor;
       if (moreGreen) grayColor = (imgData.data[n] + imgData.data[n+1]*2 + imgData.data[n+2])/4;
       else grayColor = (imgData.data[n] + imgData.data[n+1] + imgData.data[n+2])/3;
-      resultData.data[n] = resultData.data[n+1] = resultData.data[n+2] = grayColor;
+      resultData.data.fill(grayColor, n, n+4);
       resultData.data[n+3] = 255;
     }
     console.log('grayscale data:', resultData);
