@@ -1,8 +1,8 @@
 (function(wnd) {
-  if (!wnd.imgproc) imgproc = {};
+  if (!wnd.imgproc) var imgproc = wnd.imgproc = {};
 
   imgproc.getPixelLocation = function(x,y) {
-    return y*imgData.width + x;
+    return (y*imgData.width + x)*4; // if pixel (x,y) is the nth pixel, the pixel location is n*4, since each pixel has 4 values (RGBA)
   };
   imgproc.getPixel = function (imgData, x, y) {
     var ps = imgproc.getPixelLocation(x,y);

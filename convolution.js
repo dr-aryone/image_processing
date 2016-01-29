@@ -1,6 +1,7 @@
 (function(wnd) {
   // requires imgproc.js, but this will allow loading files in any order
-  if (!wnd.imgproc) imgproc = {};
+  if (!wnd.imgproc) var imgproc = wnd.imgproc = {};
+  if (!imgproc.defaults) imgproc.defaults = {};
   imgproc.defaults.kernel_size = 5;
 
   imgproc.convolution = function(ctx, kernel_source, fn, size) {
