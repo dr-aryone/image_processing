@@ -43,7 +43,7 @@
  * &lt;strong>Note:&lt;/strong> Below is a limited summary of the most commonly used properties and methods of ImageData in this package.
  * @external ImageData
  * @see {@link https://developer.mozilla.org/en-US/docs/Web/API/ImageData|ImageData}
- * @property {Uint8ClampedArray} data - Effectively a 1-dimensional array of pixel data in the format &lt;code>[R, G, B, A, R, G, B, A, ...]&lt;/code>
+ * @property {Uint8ClampedArray} data - Effectively a 1-dimensional array of pixel data in the format &lt;code>[R, G, B, A,  R, G, B, A,  ...]&lt;/code>
  * @property {Number} width - The width of the image, i.e. the number of pixels per row
  * @property {Number} height - The height of the image, i.e. the number of rows in the image
  */
@@ -51,7 +51,67 @@
 (function(wnd) {
   // reference the imgproc namespace if it exists, or create it if it doesn't already exist
   var imgproc = wnd.imgproc || (wnd.imgproc={});
-
+  
+  
+  /**
+   * A class to store color and alpha data for a single pixel.
+   * The Pixel constructor accepts five forms, ranging from 0 to 4 arguments:
+   * &lt;br />
+   * &lt;table>
+   *   &lt;tr>&lt;td>new Pixel()&lt;/td>&lt;td>rgba(0,0,0,255)&lt;/td>&lt;/tr>
+   *   &lt;tr>&lt;td>new Pixel(n)&lt;/td>&lt;td>rgba(n,n,n,255)&lt;/td>&lt;/tr>
+   *   &lt;tr>&lt;td>new Pixel(n, a)&lt;/td>&lt;td>rgba(n,n,n,a)&lt;/td>&lt;/tr>
+   *   &lt;tr>&lt;td>new Pixel(r, g, b)&lt;/td>&lt;td>rgba(r,g,b,255)&lt;/td>&lt;/tr>
+   *   &lt;tr>&lt;td>new Pixel(r, g, b, a) &amp;nbsp;&lt;/td>&lt;td>rgba(r,g,b,a)&lt;/td>&lt;/tr>
+   * &lt;/table>
+   * &lt;br />
+   *
+   * @class Pixel
+   * @memberof ImgProc
+   * @param {Number} [r=0] - red color channel value
+   * @param {Number} [g=0] - green color channel value
+   * @param {Number} [b=0] - blue color channel value
+   * @param {Number} [a=255] - alpha channel value
+   */
+  imgproc.Pixel = function() {
+    var r, g, b, a;
+    switch (arguments.length) {
+      // new Pixel() -> rgba(0,0,0,255);
+      case 0:
+        r = g = b = 0;
+        a = 255;
+        break;
+      // new Pixel(n) -> rgba(n,n,n,255);
+      case 1:
+        r = g = b = arguments[0];
+        a = 255;
+        break;
+      // new Pixel(n, a) -> rgba(n,n,n,a);
+      case 2:
+        r = g = b = arguments[0];
+        a = arguments[1];
+        break;
+      // new Pixel(r, g, b) -> rgba(r,g,b,255);
+      case 3:
+        r = arguments[0];
+        g = arguments[1];
+        b = arguments[2];
+        a = 255;
+        break;
+      // new Pixel(r, g, b, a) -> rgba(r,g,b,a);
+      // (also ignore any additional arguments and treat a larger number as 4)
+      case 4: default:
+        r = arguments[0];
+        g = arguments[1];
+        b = arguments[2];
+        a = arguments[2];
+    }
+    this.r = r;
+    this.g = g;
+    this.b = b;
+    this.a = a;
+  };
+  
   /**
    * Finds the index in an {@link external:ImageData} object of the first byte of the pixel at position (x, y) in the image.
    * @function getPixelLocation
@@ -76,12 +136,12 @@
    */
   imgproc.getPixel = function (imgData, x, y) {
     var pl = imgproc.getPixelLocation(x,y);
-    return {
-      r: imgData.data[pl],   // red byte
-      g: imgData.data[pl+1], // green byte
-      b: imgData.data[pl+2], // blue byte
-      a: imgData.data[pl+3]  // alpha byte
-    };
+    return new imgproc.Pixel(
+      imgData.data[pl],   // red byte
+      imgData.data[pl+1], // green byte
+      imgData.data[pl+2], // blue byte
+      imgData.data[pl+3]  // alpha byte
+    );
   };
 
   /**
@@ -100,17 +160,23 @@
 
   /**
    * Determines the standard deviation of a list of numbers.
+   *    average      = { average of input numbers }
+   *    deviations   = { list of each number's deviation (distance) from the average, squared }
+   *    devs_average = { average of deviations }
+   *    return sqrt( sqd_average )
    * @function standardDeviation
    * @memberof ImgProc
    * @param {Number[]} nums
-   * @returns {Number}
+   * @returns {Number} sqrt( map(n in nums, ) )
    * @example
    * expect (imgproc.standardDeviation([2, 4, 4, 4, 5, 5, 7, 9])).toEqual(2)
    * @see {@link https://en.wikipedia.org/wiki/Standard_deviation|wiki:"Standard deviation"}
-   * @todo Implement
    */
   imgproc.standardDeviation = function(nums) {
-     
+    var average      = imgproc.average(nums),
+        deviations   = nums.map(function(n) { return Math.pow(average-n, 2); }),
+        devs_average = imgproc.average(deviations);
+    return Math.sqrt(devs_average);
   };
 
 })(window);
@@ -124,13 +190,13 @@
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Externals</h3><ul><li><a href="external-ImageData.html">ImageData</a></li></ul><h3>Namespaces</h3><ul><li><a href="ImgProc.html">ImgProc</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Externals</h3><ul><li><a href="external-ImageData.html">ImageData</a></li></ul><h3>Classes</h3><ul><li><a href="ImgProc.Pixel.html">Pixel</a></li></ul><h3>Namespaces</h3><ul><li><a href="ImgProc.html">ImgProc</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.0</a> on Fri Jan 29 2016 10:16:15 GMT-0500 (Eastern Standard Time)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.0</a> on Sun Jan 31 2016 08:22:55 GMT-0500 (Eastern Standard Time)
 </footer>
 
 <script> prettyPrint(); </script>

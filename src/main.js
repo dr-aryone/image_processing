@@ -4,12 +4,14 @@ var img = document.querySelector('input#img'),
     // canvases
     base  = document.querySelector('canvas#base'),
     gray  = document.querySelector('canvas#gray'),
+    box   = document.querySelector('canvas#box'),
     gauss = document.querySelector('canvas#gauss'),
     sobel = document.querySelector('canvas#sobel'),
     
     // contexts
     baseCtx  = base.getContext('2d'),
     grayCtx  = gray.getContext('2d'),
+    boxCtx   = box.getContext('2d'),
     gaussCtx = gauss.getContext('2d'),
     sobelCtx = sobel.getContext('2d');
 
@@ -39,8 +41,10 @@ img.onchange = function() {
       // TODO: compare with mean blur; which produces better edge detection?
       //  I hypothesize that in pictures with lots of little lines that aren't edges
       //  (e.g. plants with veins and such) a mean blur might do better
-      //gaussImg = imgproc.gauss(baseData, true);
+      //gaussImg = imgproc.gaussianBlur(baseData, true);
       //gaussCtx.putImageData(gaussImg, 0, 0);
+      gaussImg = imgproc.boxBlur(baseData, 5);
+      gaussCtx.putImageData(gaussImg, 0, 0);
       
       // kick off the main program
       main();
