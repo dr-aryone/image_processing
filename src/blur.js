@@ -43,11 +43,13 @@
    */
   imgproc.boxBlur = function(imgData, kernel_size) {
     kernel_size = kernel_size || imgproc.defaults.kernel_size;
-    return imgproc.convolution(imgData, imgproc.boxKernel(kernel_size), kernel_size);
+    var kernel = imgproc.boxKernel(kernel_size);
+    console.log(kernel);
+    return imgproc.convolution(imgData, kernel, kernel_size);
   };
   imgproc.boxKernel = function(size) {
     size = size || imgproc.defaults.kernel_size; 
-    return (new Array(size)).fill((new Array(size)).fill(1));
+    return (new Array(size)).fill((new Array(size)).fill(new imgproc.Pixel(1)));
   };
 })(window);
 

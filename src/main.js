@@ -26,8 +26,8 @@ img.onchange = function() {
     
     tmpImg.onload = function() {
       // set all canvases to match the img dimensions
-      base.width  = gray.width  = gauss.width  = sobel.width  = tmpImg.width;
-      base.height = gray.height = gauss.height = sobel.height = tmpImg.height;
+      base.width  = gray.width  = box.width  = gauss.width  = sobel.width  = tmpImg.width;
+      base.height = gray.height = box.height = gauss.height = sobel.height = tmpImg.height;
       
       // draw the image on the canvas
       baseCtx.drawImage(tmpImg, 0, 0);
@@ -37,14 +37,16 @@ img.onchange = function() {
       var grayImg = imgproc.grayscale(baseData);
       grayCtx.putImageData(grayImg, 0, 0);
 
+      // box blur
+      var boxImg = imgproc.boxBlur(baseData, 5);
+      boxCtx.putImageData(boxImg, 0, 0);
+      
       // gaussian blur
       // TODO: compare with mean blur; which produces better edge detection?
       //  I hypothesize that in pictures with lots of little lines that aren't edges
       //  (e.g. plants with veins and such) a mean blur might do better
-      //gaussImg = imgproc.gaussianBlur(baseData, true);
+      //var gaussImg = imgproc.gaussianBlur(baseData, true);
       //gaussCtx.putImageData(gaussImg, 0, 0);
-      gaussImg = imgproc.boxBlur(baseData, 5);
-      gaussCtx.putImageData(gaussImg, 0, 0);
       
       // kick off the main program
       main();
