@@ -12,12 +12,11 @@
   /**
    *
    */
-  imgproc.gaussianKernel = function(area) {
+  imgproc.gaussianKernel = function(area, deviation) {
     var r = [],
         g = [],
         b = [],
-        kernel = [],
-        deviation;
+        kernel = [];
     for (var y=0; y<area.length; y++) {
       for (var x=0; x<area[y].length; x++) {
         var pixel = area[y][x] 
@@ -26,11 +25,19 @@
         b.push(pixel.b);
       }
     }
-    deviation = new imgproc.Pixel(
-      imgproc.standardDeviation(r),
-      imgproc.standardDeviation(g),
-      imgproc.standardDeviation(b)
-    );
+    if (!deviation) {
+      deviation = new imgproc.Pixel(
+        imgproc.standardDeviation(r),
+        imgproc.standardDeviation(g),
+        imgproc.standardDeviation(b)
+      );
+    }
+  };
+  /**
+   * @see {@link https://en.wikipedia.org/wiki/Gaussian_blur|Gaussian Blur at Wikipedia (en)}
+   */
+  imgproc.gaussianDistribution = function(x, y, d) {
+    
   };
 
   /**

@@ -14,7 +14,7 @@
  * <br /><br />
  * <strong>Note:</strong> Below is a limited summary of the most commonly used properties and methods of ImageData in this package.
  * @external ImageData
- * @see {@link https://developer.mozilla.org/en-US/docs/Web/API/ImageData|ImageData}
+ * @see {@link https://developer.mozilla.org/en-US/docs/Web/API/ImageData|ImageData at MDN}
  * @property {Uint8ClampedArray} data - Effectively a 1-dimensional array of pixel data in the format <code>[R, G, B, A,  R, G, B, A,  ...]</code>
  * @property {Number} width - The width of the image, i.e. the number of pixels per row
  * @property {Number} height - The height of the image, i.e. the number of rows in the image
