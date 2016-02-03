@@ -45,12 +45,10 @@
           }
           area.pixels.push(arow);
         }
-        //console.log('area:',area);
         
         // figure out the kernel if it needs figuring
         if (kernel_source.constructor === Function) kernel = kernel_source(area);
         else kernel = kernel_source;
-        //console.log('kernel:', kernel);
         
         var area_sum = new imgproc.Pixel();
         var kernel_sum = new imgproc.Pixel();
@@ -59,20 +57,16 @@
             // multiply each color channel of this pixel by its weight
             var apixel = area.pixels[j][i],
                 kpixel = kernel[j][i];
-            try {
             area_sum.r += apixel.r * kpixel.r;
             area_sum.g += apixel.g * kpixel.g;
             area_sum.b += apixel.b * kpixel.b;
             kernel_sum.r += kpixel.r;
             kernel_sum.g += kpixel.g;
             kernel_sum.b += kpixel.b;
-            } catch(e) {
-              console.log(i, j, apixel, kpixel);
-              throw e;
-            }
           }
         }
         
+        //console.log(pixloc+':'+(pixloc+4)+' sums:\t['+(area_sum.r+'/'+kernel_sum.r)+','+(area_sum.g+'/'+kernel_sum.g)+','+(area_sum.r+'/'+kernel_sum.r)+',255]');
         // find averages for each channel
         var area_avg = new imgproc.Pixel(
           Math.floor(area_sum.r / kernel_sum.r),
@@ -82,15 +76,11 @@
         
         // store convolved pixel in result imageData
         var pixloc = imgproc.getPixelLocation(imgData,x,y); // see imgproc.js
-
-        /*if (x === 0) {
-          console.log('x:',x,'y:',y);
-          console.log('gaussData['+pixloc+'-'+(pixloc+3)+'] should look like:');
-          console.log(area_avg.r, area_avg.g, area_avg.b, area_avg.a);
-        }*/
-        resultData.data[pixloc]   = area_avg.r;
-        resultData.data[pixloc+1] = area_avg.g;
-        resultData.data[pixloc+2] = area_avg.b;
+        
+        //console.log(pixloc+':'+(pixloc+4)+'\t['+Math.round(area_avg.r)+','+Math.round(area_avg.g)+','+Math.round(area_avg.r)+',255]');
+        resultData.data[pixloc]   = Math.round(area_avg.r);
+        resultData.data[pixloc+1] = Math.round(area_avg.g);
+        resultData.data[pixloc+2] = Math.round(area_avg.b);
         resultData.data[pixloc+3] = 255;
       }
     }
