@@ -11,7 +11,6 @@
       resultData.data.fill(grayColor, n, n+3);
       resultData.data[n+3] = 255;
     }
-    console.log('grayscale data:', resultData);
     return resultData;
   };
 })(window);
